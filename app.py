@@ -59,9 +59,12 @@ async def roblox_user(ctx, user_id: str):
 
 @bot.command()
 async def fetchbadge(ctx, badge_id: str):
+    if not badge_id.isdigit():
+        await ctx.send(embed=failed(f"Please provide a valid badge ID, Example: `{PREFIX}fetchbadge 3141599589206075`"))
+        return
+    
     badge_id = int(badge_id)
     try : 
-        
         badge = await roblox_client.get_badge(badge_id)
 
         badge_icons = await roblox_client.thumbnails.get_badge_icons(
