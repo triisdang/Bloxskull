@@ -10,7 +10,8 @@ discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 
 roblox_client = Client()
 
-PREFIX = "💀!"
+# PREFIX = "💀!"
+PREFIX = "!" # change it 
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -48,10 +49,34 @@ async def roblox_user(ctx, user_id: str):
         embed.add_field(name="Is banned?" , value=user.is_banned, inline=True)
         embed.add_field(name="Join date", value=user.created, inline=True)
         if user_thumbnails:
-            embed.set_image(url=user_thumbnails[0].image_url)
+            embed.set_thumbnail(url=user_thumbnails[0].image_url)
 
         await ctx.send(embed=embed)
 
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+
+@bot.command()
+async def fetchbadge(ctx, badge_id: str):
+    badge_id = int(badge_id)
+    try : 
+        
+        badge = await roblox_client.get_badge(badge_id)
+
+        badge_icons = await roblox_client.thumbnails.get_badge_icons(
+        badges=[badge],
+        size=(150, 150)
+        )
+        embed = discord.Embed(title=f"Badge: {badge.name}", color=0x00ff00)
+        embed.add_field(name="ID", value=badge.id, inline=False)
+        embed.add_field(name="Description", value=badge.description or "No description.", inline=True)
+        embed.add_field(name="Enabled", value=badge.enabled, inline=True)
+        embed.add_field(name="Created", value=badge.created, inline=True)
+        embed.add_field(name="Updated", value=badge.updated, inline=True)
+       # embed.add_field(name="Awarded count", value=BadgeStatistics.awarded_count, inline=True)
+        embed.set_thumbnail(url=badge_icons[0].image_url)
+
+        await ctx.send(embed=embed) 
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
 
