@@ -9,7 +9,7 @@ from roblox.thumbnails import AvatarThumbnailType
 load_dotenv()
 discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 
-roblox_client = Client()
+roblox_client = Client(os.getenv("ROBLOX_COOKIE"))
 
 # PREFIX = "💀!"
 PREFIX = "!" # change it 
@@ -30,8 +30,8 @@ async def on_ready():
 @bot.command()
 async def about(ctx):
     embed = discord.Embed(title="About", description="This is a simple discord bot that fetches Roblox user information and badge information, Powered by ro.py", color=0x00ff00)
-    embed.add_field(name="Author", value="Chip")
-    embed.add_field(name="Github", value="[Github](https://github.com/triisdang)", inline=False)
+    embed.add_field(name="Author", value="Chip", inline=True)
+    embed.add_field(name="Github", value="[Github](https://github.com/triisdang)", inline=True)
     await ctx.send(embed=embed)
 
 
@@ -95,5 +95,31 @@ async def fetchbadge(ctx, badge_id: str):
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
 
-
+@bot.command()
+async def fetchgame(ctx, place_id: str):
+    if not place_id.isdigit():
+        await ctx.send(embed=failed(f"Please provide a valid game ID, Example: `{PREFIX}fetchgame 3141599589206075`"))
+        return
+    
+    place_id = int(place_id)
+    try:  
+        place = await roblox_client.get_place(place_id)
+        place.url = place.url
+        place_thumbnails = await roblox_client.thumbnails.get_place_icons(
+            places=[place],
+            size=(512, 512)
+        )
+        embed = discord.Embed(title=f"Game: {place.name}", color=0x00ff00)
+        embed.add_field(name="ID", value=place.id, inline=False)
+        embed.add_field(name="Description", value=place.description or "No description.", inline=True)
+        embed.add_field(name="Is playable?", value="Yes" if place.is_playable else "No", inline=True)
+        embed.add_field(name="Who made it?", value=f"{place.builder} (ID : {place.builder_id})", inline=True)
+        embed.add_field(name="Game link", value=f"Click me![{place.url}]", inline=True)
+        embed.add_field(name="Price", value=place.price if not place.price == 0 else "Free", inline=True)
+        embed.set_thumbnail(url=place_thumbnails[0].image_url)
+        await ctx.send(embed=embed)
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+        return
+        
 bot.run(discordbottoken)
