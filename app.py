@@ -28,7 +28,7 @@ async def on_ready():
 
 
 @bot.command()
-async def about():
+async def about(ctx):
     embed = discord.Embed(title="About", description="This is a simple discord bot that fetches Roblox user information and badge information, Powered by ro.py", color=0x00ff00)
     embed.add_field(name="Author", value="Chip")
     embed.add_field(name="Github", value="[Github](https://github.com/triisdang)", inline=False)
