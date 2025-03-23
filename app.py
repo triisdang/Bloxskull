@@ -76,6 +76,7 @@ async def fetchbadge(ctx, badge_id: str):
         embed.add_field(name="Created", value=badge.created, inline=True)
         embed.add_field(name="Updated", value=badge.updated, inline=True)
         embed.add_field(name="Awarded count", value=statistics.awarded_count, inline=True)
+        embed.add_field(name="Win rate percentage", value=f"{statistics.win_rate_percentage}%", inline=True)
         embed.set_thumbnail(url=badge_icons[0].image_url)
 
         await ctx.send(embed=embed) 
