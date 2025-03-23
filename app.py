@@ -26,6 +26,15 @@ def failed(message):
 async def on_ready():
     print(f'{bot.user}🎉')
 
+
+@bot.command()
+async def about():
+    embed = discord.Embed(title="About", description="This is a simple discord bot that fetches Roblox user information and badge information, Powered by ro.py", color=0x00ff00)
+    embed.add_field(name="Author", value="Chip")
+    embed.add_field(name="Github", value="[Github](https://github.com/triisdang)", inline=False)
+    await ctx.send(embed=embed)
+
+
 @bot.command()
 async def roblox_user(ctx, user_id: str):  
     if not user_id.isdigit():  
