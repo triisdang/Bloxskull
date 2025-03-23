@@ -3,6 +3,7 @@ import os
 import discord
 from discord.ext import commands
 from roblox import Client
+from roblox.thumbnails import AvatarThumbnailType
 
 load_dotenv()
 discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
@@ -15,34 +16,44 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
-
-
-
-def failed (message):
+def failed(message):
     embed = discord.Embed(title="Error", description=message, color=0xff0000)
     return embed
 
-
-
 @bot.event
 async def on_ready():
-    print(f'{bot.user} 🎉')
-
+    print(f'{bot.user}🎉')
 
 @bot.command()
-async def roblox_user(ctx, user_id: int):
-    """Fetches Roblox user details by ID"""
+async def roblox_user(ctx, user_id: str):  
+    if not user_id.isdigit():  
+        await ctx.send(embed=failed(f"Please provide a valid user ID, Example: `{PREFIX}roblox_user 1`"))
+        return  
+
+    user_id = int(user_id)  
+
     try:
-        if user_id is None:
-            await ctx.send(embed=failed("Please provide a valid user ID, Example: `!roblox_user 1`"))
-        else:
-            user = await roblox_client.get_user(user_id)
-            embed = discord.Embed(title=f"Roblox User: {user.name}", color=0x00ff00)
-            embed.add_field(name="ID", value=user.id)
-            embed.add_field(name="Display name", value=user.display_name)
-            embed.add_field(name="Description", value=user.description)
-            await ctx.send(embed=embed)
+        user = await roblox_client.get_user(user_id)
+
+        user_thumbnails = await roblox_client.thumbnails.get_user_avatar_thumbnails(
+            users=[user_id], 
+            type=AvatarThumbnailType.full_body, 
+            size=(420, 420)
+        )
+
+        embed = discord.Embed(title=f"Roblox User: {user.name}", color=0x00ff00)
+        embed.add_field(name="ID", value=user.id, inline=False)
+        embed.add_field(name="Display name", value=user.display_name, inline=True)
+        embed.add_field(name="Description", value=user.description or "No description.", inline=True)
+        embed.add_field(name="Is banned?" , value=user.is_banned, inline=True)
+        embed.add_field(name="Join date", value=user.created, inline=True)
+        if user_thumbnails:
+            embed.set_image(url=user_thumbnails[0].image_url)
+
+        await ctx.send(embed=embed)
+
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
+
 
 bot.run(discordbottoken)
