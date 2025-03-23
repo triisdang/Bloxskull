@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands
 from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
-from roblox.badges import BadgeStatistics
 
 
 load_dotenv()
@@ -69,13 +68,14 @@ async def fetchbadge(ctx, badge_id: str):
         badges=[badge],
         size=(150, 150)
         )
+        statistics = badge.statistics
         embed = discord.Embed(title=f"Badge: {badge.name}", color=0x00ff00)
         embed.add_field(name="ID", value=badge.id, inline=False)
         embed.add_field(name="Description", value=badge.description or "No description.", inline=True)
         embed.add_field(name="Enabled", value=badge.enabled, inline=True)
         embed.add_field(name="Created", value=badge.created, inline=True)
         embed.add_field(name="Updated", value=badge.updated, inline=True)
-        embed.add_field(name="Awarded count", value=BadgeStatistics.awarded_count, inline=True)
+        embed.add_field(name="Awarded count", value=statistics.awarded_count, inline=True)
         embed.set_thumbnail(url=badge_icons[0].image_url)
 
         await ctx.send(embed=embed) 
