@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
-
+from roblox import groups
 
 load_dotenv()
 discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
@@ -111,15 +111,41 @@ async def fetchgame(ctx, place_id: str):
         )
         embed = discord.Embed(title=f"Game: {place.name}", color=0x00ff00)
         embed.add_field(name="ID", value=place.id, inline=False)
-        embed.add_field(name="Description", value=place.description or "No description.", inline=True)
+        embed.add_field(name="Description", value=place.description or "No description.", inline=False)
         embed.add_field(name="Is playable?", value="Yes" if place.is_playable else "No", inline=True)
         embed.add_field(name="Who made it?", value=f"{place.builder} (ID : {place.builder_id})", inline=True)
-        embed.add_field(name="Game link", value=f"Click me![{place.url}]", inline=True)
+        embed.add_field(name="Game link", value=f"[Click me!]({place.url})", inline=True)
         embed.add_field(name="Price", value=place.price if not place.price == 0 else "Free", inline=True)
         embed.set_thumbnail(url=place_thumbnails[0].image_url)
         await ctx.send(embed=embed)
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
         return
+    
+
+@bot.command()
+async def fetchgroup(ctx, group_id: str):
+    if not group_id.isdigit():
+        await ctx.send(embed=failed(f"Please provide a valid group ID, Example: `{PREFIX}fetchgroup 1`"))
+        return
+    try: 
+        groups = await roblox_client.get_group(group_id)
+        group_thumbnails = await roblox_client.thumbnails.get_group_icons(
+            groups=[groups],
+            size=(150, 150)
+        )
+        embed = discord.Embed(title=f"Group: {groups.name}", color=0x00ff00)
+        embed.add_field(name="ID", value=groups.id, inline=False)
+        embed.add_field(name="Description", value=groups.description or "No description.", inline=False)
+        embed.add_field(name="Owner", value=f"{groups.owner}", inline=True)
+        embed.add_field(name="Member count", value=groups.member_count, inline=True)
+        embed.add_field(name="Is locked?", value="Yes" if groups.is_locked == True else "No" , inline=True)
+        embed.add_field(name="Shout", value=groups.shout, inline=True)
+        embed.set_thumbnail(url=group_thumbnails[0].image_url)
+        await ctx.send(embed=embed)
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+        return
         
+
 bot.run(discordbottoken)
