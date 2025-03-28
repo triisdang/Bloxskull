@@ -7,13 +7,15 @@ from roblox.thumbnails import AvatarThumbnailType
 from roblox import groups
 from yay.package import *
 from better_profanity import profanity as pf
-
+import discord_webhook as dh
+from discord_webhook import DiscordWebhook, DiscordEmbed    
 
 load_dotenv()
 discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 
 roblox_client = Client(os.getenv("ROBLOX_COOKIE"))
-
+devmode = os.getenv("devmode")
+discordhookurl = os.getenv("dishook")
 # PREFIX = "💀!"
 PREFIX = "!" # change it 
 
@@ -21,9 +23,34 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
+
+
+
+
+if devmode == "false":
+    bot.remove_command("feedback")
+else:
+    print("i said dont enable this in the .env file!!! 😡😡😡")
+    if discordhookurl == "none":
+        print("you know 0 skillz about python huh? 😡😡😡 DISNABLE DEVMODE NOW!")
+        bot.remove_command("feedback")
+    else:
+        print("you are a good developer, but you still need to learn more about python and discord.py, fork this project 😍😍😍😍")
+        print("and make it better, i will be waiting for you to make it better 😍😍😍😍.")
+        webhook = DiscordWebhook(url=discordhookurl, username="Feedback Guy", avatar_url="https://cdn.discordapp.com/attachments/1355188785314529360/1355200439016095905/0eTzq1g.png?ex=67e81043&is=67e6bec3&hm=ae9a383c67c1b55c22342a37f98b7267c40621887ebc372777518f394f0f8a33&")
+
+
 def failed(message):
     embed = discord.Embed(title="Error", description=message, color=0xff0000)
     return embed
+
+def feedbackform(message, author):
+    webhook = DiscordWebhook(url=discordhookurl, username="Feedback Guy")
+    embed = DiscordEmbed(title="Feedback", description=message, color=0x00ff00)
+    embed.set_footer(text=f"Feedback from {author}")
+    webhook.add_embed(embed)
+    response = webhook.execute()
+    return response
 
 @bot.event
 async def on_ready():
@@ -153,17 +180,25 @@ async def fetchgroup(ctx, group_id: str):
         return
 @bot.command()
 async def feedback(ctx, *, feedback: str):
-    if not feedback:
-        await ctx.send(embed=failed("Please provide a feedback."))
-        return
-    pf.load_censor_words()
-    feedback = pf.censor(feedback) # nuh uh
-    if feedback == "": 
-        await ctx.send(embed=failed("Please provide a valid feedback."))
-        return
-    embed = discord.Embed(title="Feedback", description=feedback, color=0x00ff00)
-    embed.set_footer(text=f"Feedback from {ctx.author}")
-    await ctx.send(embed=embed)
-    await ctx.send("Thank you for your feedback!")
+        if not feedback:
+            await ctx.send(embed=failed("Please provide a feedback."))
+            return
+        pf.load_censor_words()
+        feedback = pf.censor(feedback) # nuh uh
+        if feedback == "": 
+            await ctx.send(embed=failed("Please provide a valid feedback."))
+            return
+
+        response = feedbackform(feedback.replace('*','X'), ctx.author)
+        if response.status_code == 200:
+            embed = discord.Embed(title="Feedback", description="Your feedback has been sent successfully!", color=0x00ff00)
+            if "X" not in feedback:
+                embed.set_footer(text=f":D")
+            else:
+                embed.set_footer(text=f"Don't say bad things to the devs, they are working hard to make this bot better every day! 💖")
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send(embed=failed("Failed to send feedback. Please try again later.. :(. Error : " + str(response)))
+            return
 
 bot.run(discordbottoken)
