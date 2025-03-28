@@ -6,6 +6,7 @@ from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
 from roblox import groups
 
+
 load_dotenv()
 discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 
@@ -45,13 +46,14 @@ async def roblox_user(ctx, user_id: str):
 
     try:
         user = await roblox_client.get_user(user_id)
+        presence = await user.get_presence()
 
         user_thumbnails = await roblox_client.thumbnails.get_user_avatar_thumbnails(
             users=[user_id], 
             type=AvatarThumbnailType.full_body, 
             size=(420, 420)
         )
-
+        lastonline = presence.last_online
         embed = discord.Embed(title=f"Roblox User: {user.name}", color=0x00ff00)
         embed.add_field(name="ID", value=user.id, inline=False)
         embed.add_field(name="Display name", value=user.display_name, inline=True)
