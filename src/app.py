@@ -6,7 +6,7 @@ from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
 from roblox import groups
 from yay.package import *
-
+from profan
 
 
 load_dotenv()
@@ -151,6 +151,14 @@ async def fetchgroup(ctx, group_id: str):
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
         return
-        
+@bot.command()
+async def feedback(ctx, *, feedback: str):
+    if not feedback:
+        await ctx.send(embed=failed("Please provide a feedback."))
+        return
+    embed = discord.Embed(title="Feedback", description=feedback, color=0x00ff00)
+    embed.set_footer(text=f"Feedback from {ctx.author}")
+    await ctx.send(embed=embed)
+    await ctx.send("Thank you for your feedback!")
 
 bot.run(discordbottoken)
