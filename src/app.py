@@ -6,7 +6,7 @@ from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
 from roblox import groups
 from yay.package import *
-from profan
+from profanity_filter import profanity_filter as pf
 
 
 load_dotenv()
@@ -156,6 +156,11 @@ async def feedback(ctx, *, feedback: str):
     if not feedback:
         await ctx.send(embed=failed("Please provide a feedback."))
         return
+    
+    if feedback == "": 
+        await ctx.send(embed=failed("Please provide a valid feedback."))
+        return
+    feedback = pf.censor(feedback) # nuh uh
     embed = discord.Embed(title="Feedback", description=feedback, color=0x00ff00)
     embed.set_footer(text=f"Feedback from {ctx.author}")
     await ctx.send(embed=embed)
