@@ -7,7 +7,7 @@ def pickrandom(id):
     if id == "game" :
         return(random.choice(gamelist))
     elif id == "user" :
-        return(random.choice(gamelist))
+        return(random.choice(userlist))
     elif id == "badge" :
         return(random.choice(badgelist))
     elif id == "group" :

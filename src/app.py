@@ -40,7 +40,7 @@ async def about(ctx):
 
 @bot.command()
 async def fetchuser(ctx, user_id: str):  
-    if not user_id.isdigit():  
+    if not user_id.isdigit() or user_id == "":  
         randomuser = pickrandom("user")
         await ctx.send(embed=failed(f"Please provide a valid user ID, Example: `{PREFIX}fetchuser {randomuser}`"))
         return  
@@ -49,8 +49,6 @@ async def fetchuser(ctx, user_id: str):
 
     try:
         user = await roblox_client.get_user(user_id)
-        presence = await user.get_presence()
-
         user_thumbnails = await roblox_client.thumbnails.get_user_avatar_thumbnails(
             users=[user_id], 
             type=AvatarThumbnailType.full_body, 
