@@ -1,3 +1,8 @@
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/710648bf-891b-4d1d-81fa-775e650f1108">
+</p>
+
+
 # Blox Skull 💀
 Made by chip with python.
 
@@ -5,7 +10,7 @@ Made by chip with python.
 
 1. Duplicate the example.env, then rename it to .env
 2. Get a [ROBLOXSECURITY](https://github.com/ro-py/ro.py/blob/main/docs/tutorials/roblosecurity.md), Paste it in the .env file. 
- > (Don't worry! we dont steal your cookie. You can create an alt account for this.)
+ > (Don't worry! we dont steal your cookie. We Recomend you should create an alt account for this.)
 3.  Grab a discord bot token and paste it to the .env file.
 
  Its should look like this :
