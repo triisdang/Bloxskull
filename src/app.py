@@ -37,7 +37,6 @@ else:
     else:
         print("you are a good developer, but you still need to learn more about python and discord.py, fork this project 😍😍😍😍")
         print("and make it better, i will be waiting for you to make it better 😍😍😍😍.")
-        webhook = DiscordWebhook(url=discordhookurl, username="Feedback Guy", avatar_url="https://cdn.discordapp.com/attachments/1355188785314529360/1355200439016095905/0eTzq1g.png?ex=67e81043&is=67e6bec3&hm=ae9a383c67c1b55c22342a37f98b7267c40621887ebc372777518f394f0f8a33&")
 
 
 def failed(message):
@@ -45,7 +44,7 @@ def failed(message):
     return embed
 
 def feedbackform(message, author):
-    webhook = DiscordWebhook(url=discordhookurl, username="Feedback Guy")
+    webhook = DiscordWebhook(url=discordhookurl, username="John the feedback guy", avatar_url="https://cdn.discordapp.com/attachments/1355188785314529360/1355200439016095905/0eTzq1g.png?ex=67e81043&is=67e6bec3&hm=ae9a383c67c1b55c22342a37f98b7267c40621887ebc372777518f394f0f8a33&")
     embed = DiscordEmbed(title="Feedback", description=message, color=0x00ff00)
     embed.set_footer(text=f"Feedback from {author}")
     webhook.add_embed(embed)
