@@ -5,6 +5,8 @@ from discord.ext import commands
 from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
 from roblox import groups
+from yay.package import *
+
 
 
 load_dotenv()
@@ -37,9 +39,10 @@ async def about(ctx):
 
 
 @bot.command()
-async def roblox_user(ctx, user_id: str):  
+async def fetchuser(ctx, user_id: str):  
     if not user_id.isdigit():  
-        await ctx.send(embed=failed(f"Please provide a valid user ID, Example: `{PREFIX}roblox_user 1`"))
+        randomuser = pickrandom("user")
+        await ctx.send(embed=failed(f"Please provide a valid user ID, Example: `{PREFIX}fetchuser {randomuser}`"))
         return  
 
     user_id = int(user_id)  
@@ -71,7 +74,8 @@ async def roblox_user(ctx, user_id: str):
 @bot.command()
 async def fetchbadge(ctx, badge_id: str):
     if not badge_id.isdigit():
-        await ctx.send(embed=failed(f"Please provide a valid badge ID, Example: `{PREFIX}fetchbadge 3141599589206075`"))
+        randombadge = pickrandom("badge")
+        await ctx.send(embed=failed(f"Please provide a valid badge ID, Example: `{PREFIX}fetchbadge {randombadge}`"))
         return
     
     badge_id = int(badge_id)
@@ -100,7 +104,8 @@ async def fetchbadge(ctx, badge_id: str):
 @bot.command()
 async def fetchgame(ctx, place_id: str):
     if not place_id.isdigit():
-        await ctx.send(embed=failed(f"Please provide a valid game ID, Example: `{PREFIX}fetchgame 3141599589206075`"))
+        randomgame = pickrandom("game")
+        await ctx.send(embed=failed(f"Please provide a valid game ID, Example: `{PREFIX}fetchgame {randomgame}`"))
         return
     
     place_id = int(place_id)
@@ -128,7 +133,8 @@ async def fetchgame(ctx, place_id: str):
 @bot.command()
 async def fetchgroup(ctx, group_id: str):
     if not group_id.isdigit():
-        await ctx.send(embed=failed(f"Please provide a valid group ID, Example: `{PREFIX}fetchgroup 1`"))
+        randomgroup = pickrandom("group")
+        await ctx.send(embed=failed(f"Please provide a valid group ID, Example: `{PREFIX}fetchgroup {randomgroup}`"))
         return
     try: 
         groups = await roblox_client.get_group(group_id)
