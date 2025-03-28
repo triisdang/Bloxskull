@@ -56,7 +56,6 @@ async def fetchuser(ctx, user_id: str):
             type=AvatarThumbnailType.full_body, 
             size=(420, 420)
         )
-        lastonline = presence.last_online
         embed = discord.Embed(title=f"Roblox User: {user.name}", color=0x00ff00)
         embed.add_field(name="ID", value=user.id, inline=False)
         embed.add_field(name="Display name", value=user.display_name, inline=True)
