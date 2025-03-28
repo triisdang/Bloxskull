@@ -192,7 +192,7 @@ async def feedback(ctx, *, feedback: str):
         response = feedbackform(feedback.replace('*','X'), ctx.author)
         if response.status_code == 200:
             embed = discord.Embed(title="Feedback", description="Your feedback has been sent successfully!", color=0x00ff00)
-            if "X" not in feedback:
+            if "*" not in feedback:
                 embed.set_footer(text=f":D")
             else:
                 embed.set_footer(text=f"Don't say bad things to the devs, they are working hard to make this bot better every day! 💖")
