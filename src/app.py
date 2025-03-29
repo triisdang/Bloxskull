@@ -6,6 +6,7 @@ from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
 from roblox import groups
 from yay.package import *
+from yay.update import *
 from better_profanity import profanity as pf
 import discord_webhook as dh
 from discord_webhook import DiscordWebhook, DiscordEmbed    
@@ -22,7 +23,6 @@ PREFIX = "!" # change it
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
-
 
 
 if devmode == "false":
@@ -52,6 +52,18 @@ def feedbackform(message, author):
 @bot.event
 async def on_ready():
     print(f'{bot.user}🎉')
+
+@bot.command()
+async def checkforupdates(ctx) :
+    newupdate = newupdate()
+    if newupdate == True :
+        embed = discord.Embed(title="Update", description="There is a new update available!", color=0x0000FF)
+        embed.add_field(name="Latest version", value=get_latest_release(), inline=True)
+        embed.add_field(name="Current version", value="0.0.0", inline=True)
+        await ctx.send(embed=embed)
+    else:
+        embed = discord.Embed(title="Update", description="You are using the latest version!", color=0x00ff00)
+        await ctx.send(embed=embed)
 
 
 @bot.command()
