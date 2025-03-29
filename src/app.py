@@ -60,6 +60,7 @@ async def checkforupdates(ctx) :
         embed = discord.Embed(title="Update", description="There is a new update available!", color=0x0000FF)
         embed.add_field(name="Latest version", value=get_latest_release(), inline=True)
         embed.add_field(name="Current version", value="0.0.0", inline=True)
+        embed.add_field(name="Github", value="[Download the latest version from github](https://github.com/triisdang/Bloxskull)",inline=False)
         await ctx.send(embed=embed)
     else:
         embed = discord.Embed(title="Update", description="You are using the latest version!", color=0x00ff00)
