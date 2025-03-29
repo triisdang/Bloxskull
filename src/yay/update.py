@@ -16,6 +16,6 @@ def newupdates() :
     latest_version = get_latest_release()
     local_version = "0.0.0"
     if latest_version and latest_version != local_version:
-        return("True")
+        return(True)
     else:
-        print("False")
+        return(False)
