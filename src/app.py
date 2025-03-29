@@ -55,7 +55,7 @@ async def on_ready():
 
 @bot.command()
 async def checkforupdates(ctx) :
-    newupdate = newupdate()
+    newupdate = newupdates()
     if newupdate == True :
         embed = discord.Embed(title="Update", description="There is a new update available!", color=0x0000FF)
         embed.add_field(name="Latest version", value=get_latest_release(), inline=True)
