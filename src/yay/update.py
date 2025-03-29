@@ -14,7 +14,7 @@ local_version = "0.0.0" # test this
 
 def newupdates() :
     latest_version = get_latest_release()
-    local_version = "0.0.0"
+    local_version = "1.0.0"
     if latest_version and latest_version != local_version:
         return(True)
     else:
