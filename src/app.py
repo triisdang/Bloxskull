@@ -24,7 +24,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
 
-
+version = "1.0.0"
 
 
 if devmode == "false":
