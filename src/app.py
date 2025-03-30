@@ -24,7 +24,7 @@ PREFIX = os.getenv("PREFIX") # change it
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
-
+bot.remove_command("help")
 
 if devmode == "false":
     bot.remove_command("feedback")
@@ -67,6 +67,22 @@ async def checkforupdates(ctx) :
         embed = discord.Embed(title="Update", description="You are using the latest version!", color=0x00ff00)
         await ctx.send(embed=embed)
 
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(title="Help", description="This is a simple discord bot that fetches Roblox user information and badge information, Powered by ro.py", color=0x00ff00)
+    commands_list = [
+        f"`{PREFIX}fetchuser <user_id>` - Fetch user information",
+        f"`{PREFIX}fetchbadge <badge_id>` - Fetch badge information",
+        f"`{PREFIX}fetchgame <place_id>` - Fetch game information",
+        f"`{PREFIX}fetchgroup <group_id>` - Fetch group information",
+        f"`{PREFIX}fetchcatalog <item_id>` - Fetch catalog item information",
+        f"`{PREFIX}checkforupdates` - Check for updates"
+    ]
+    if devmode != "false":
+        commands_list.append(f"`{PREFIX}feedback <feedback>` - Send feedback to the developer")
+    embed.add_field(name="Commands", value="\n".join(commands_list), inline=False)
+    embed.set_footer(text="Use the prefix before each command")
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def about(ctx):
