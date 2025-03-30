@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
-from roblox import groups
+from roblox.assets import EconomyAsset
 from yay.package import *
 from yay.update import *
 from better_profanity import profanity as pf
@@ -17,13 +17,14 @@ discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 roblox_client = Client(os.getenv("ROBLOX_COOKIE"))
 devmode = os.getenv("devmode")
 discordhookurl = os.getenv("dishook")
+
 # PREFIX = "💀!"
-PREFIX = "!" # change it 
+PREFIX = os.getenv("PREFIX") # change it 
 
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
-
+bot.remove_command("help")
 
 if devmode == "false":
     bot.remove_command("feedback")
@@ -55,16 +56,33 @@ async def on_ready():
 
 @bot.command()
 async def checkforupdates(ctx) :
-    newupdate = newupdate()
+    newupdate = newupdates()
     if newupdate == True :
         embed = discord.Embed(title="Update", description="There is a new update available!", color=0x0000FF)
         embed.add_field(name="Latest version", value=get_latest_release(), inline=True)
         embed.add_field(name="Current version", value="0.0.0", inline=True)
+        embed.add_field(name="Github", value="[Download the latest version from github](https://github.com/triisdang/Bloxskull)",inline=False)
         await ctx.send(embed=embed)
     else:
         embed = discord.Embed(title="Update", description="You are using the latest version!", color=0x00ff00)
         await ctx.send(embed=embed)
 
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(title="Help", description="This is a simple discord bot that fetches Roblox user information and badge information, Powered by ro.py", color=0x00ff00)
+    commands_list = [
+        f"`{PREFIX}fetchuser <user_id>` - Fetch user information",
+        f"`{PREFIX}fetchbadge <badge_id>` - Fetch badge information",
+        f"`{PREFIX}fetchgame <place_id>` - Fetch game information",
+        f"`{PREFIX}fetchgroup <group_id>` - Fetch group information",
+        f"`{PREFIX}fetchcatalog <item_id>` - Fetch catalog item information",
+        f"`{PREFIX}checkforupdates` - Check for updates"
+    ]
+    if devmode != "false":
+        commands_list.append(f"`{PREFIX}feedback <feedback>` - Send feedback to the developer")
+    embed.add_field(name="Commands", value="\n".join(commands_list), inline=False)
+    embed.set_footer(text="Use the prefix before each command")
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def about(ctx):
@@ -187,6 +205,36 @@ async def fetchgroup(ctx, group_id: str):
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
         return
+@bot.command()
+async def fetchcatalog(ctx, *, item_id: str):
+    if not item_id.isdigit():
+        randomitem = pickrandom("catalog")
+        await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog {randomitem}`"))
+        #await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog 121059938714983`"))
+        return
+        
+    item_id = int(item_id)
+    try:
+        item = await roblox_client.get_asset(item_id)  
+        asset_thumbnails = await roblox_client.thumbnails.get_asset_thumbnails(
+            assets=[item],
+            size=(150, 150)
+        )
+        embed = discord.Embed(title=f"Catalog Item: {item.name}", color=0x00ff00)
+        embed.add_field(name="ID", value=item.id, inline=False)
+        embed.add_field(name="Description", value=item.description or "No description.", inline=False)
+        embed.add_field(name="Creator", value=f"{item.creator.name} (ID : {item.creator.id})", inline=True)
+        embed.add_field(name="Price", value=item.price if item.price else "Free", inline=True)
+        embed.add_field(name="Sold count", value=item.sales, inline=True)
+        embed.add_field(name="Created", value=item.created, inline=True)
+        embed.add_field(name="Last updated", value=item.updated, inline=True)
+        embed.add_field(name="Limted item?", value="Yes" if item.is_limited else "No", inline=True)
+        embed.set_thumbnail(url=asset_thumbnails[0].image_url)
+        await ctx.send(embed=embed)
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+        return
+
 @bot.command()
 async def feedback(ctx, *, feedback: str):
         if not feedback:

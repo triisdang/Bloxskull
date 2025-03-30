@@ -1,5 +1,4 @@
 import requests
-import json
 
 def get_latest_release():
     url = "https://api.github.com/repos/triisdang/Bloxskull/releases/latest"
@@ -13,10 +12,10 @@ latest_version = get_latest_release()
 # local_version = localversion()
 local_version = "0.0.0" # test this 
 
-def newupdate() :
+def newupdates() :
     latest_version = get_latest_release()
     local_version = "1.0.1"
     if latest_version and latest_version != local_version:
-        return("True")
+        return(True)
     else:
-        print("False")
+        return(False)
