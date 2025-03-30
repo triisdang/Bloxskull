@@ -17,6 +17,7 @@ Made by chip with python.
 OWNER=your_discord_id # leave this alone for now  
 DISCORD_BOT_TOKEN=XXXXXXXXXXXXXXXXXXXX
 ROBLOX_COOKIE=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_XXXXXXXXXXXXXXXXXXXXXXX....
+PREFIX=! # change to your prefix, its could be whatever you like
 # dont touch anything below this if you know what are you doing lil bro
 devmode=false  
 dishook=none  
