@@ -191,9 +191,9 @@ async def fetchgroup(ctx, group_id: str):
 @bot.command()
 async def fetchcatalog(ctx, *, item_id: str):
     if not item_id.isdigit():
-        #randomitem = pickrandom("catalog")
-        #await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog {randomitem}`"))
-        await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog 121059938714983`"))
+        randomitem = pickrandom("catalog")
+        await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog {randomitem}`"))
+        #await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog 121059938714983`"))
         return
         
     item_id = int(item_id)
