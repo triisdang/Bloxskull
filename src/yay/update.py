@@ -8,14 +8,10 @@ def get_latest_release():
     return None
 
 
-latest_version = get_latest_release()
-# local_version = localversion()
-local_version = "0.0.0" # test this 
-
-def newupdates() :
+def newupdates():
     latest_version = get_latest_release()
     local_version = "1.0.1"
     if latest_version and latest_version != local_version:
-        return(True)
+        return True
     else:
-        return(False)
+        return False
