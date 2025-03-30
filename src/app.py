@@ -17,6 +17,7 @@ discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 roblox_client = Client(os.getenv("ROBLOX_COOKIE"))
 devmode = os.getenv("devmode")
 discordhookurl = os.getenv("dishook")
+discordhookurl2 = os.getenv("dishook2")
 
 # PREFIX = "💀!"
 PREFIX = os.getenv("PREFIX") # change it 
@@ -30,7 +31,7 @@ if devmode == "false":
     bot.remove_command("feedback")
 else:
     print("i said dont enable this in the .env file!!! 😡😡😡")
-    if discordhookurl == "none":
+    if discordhookurl == "none" or discordhookurl2 == "none":
         print("you know 0 skillz about python huh? 😡😡😡 DISNABLE DEVMODE NOW!")
         bot.remove_command("feedback")
     else:
@@ -50,9 +51,25 @@ def feedbackform(message, author):
     response = webhook.execute()
     return response
 
+def joinnotice(guild):
+    webhook = DiscordWebhook(url=discordhookurl2, username="Aryan the join guy", avatar_url="https://cdn.discordapp.com/attachments/1355833599273861170/1355833989155262494/3C9YQiJ.png?ex=67ea5e4d&is=67e90ccd&hm=31821a07bc312929804ea5dc89b86f3a552f2b572b29b43d4d1b0049b7d812b8&")
+    embed = DiscordEmbed(title="Joined a new server!", description=guild, color=0x00ff00)
+    embed.set_footer(text=f"{guild}🎉")
+    webhook.add_embed(embed)
+    response = webhook.execute()
+    return response
+
+
+
 @bot.event
 async def on_ready():
     print(f'{bot.user}🎉')
+
+@bot.event
+async def on_guild_join(guild):
+    if devmode == True:
+        print("joined a new server")
+        joinnotice(guild.name)
 
 @bot.command()
 async def checkforupdates(ctx) :

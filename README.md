@@ -2,6 +2,13 @@
     <img src="https://github.com/user-attachments/assets/710648bf-891b-4d1d-81fa-775e650f1108">
 </p>
 
+> [!CAUTION]
+> This is a test version, do not use this version
+
+
+> [!NOTE]
+>(if you know what are you doing)
+
 # Blox Skull 💀
 Made by chip with python.
 
