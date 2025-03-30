@@ -1,4 +1,3 @@
 robloxpy==0.2.21
 better_profanity==0.7.0
 python-dotenv==1.0.0
-discord.py==2.5.2
