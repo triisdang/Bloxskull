@@ -17,8 +17,9 @@ discordbottoken = os.getenv("DISCORD_BOT_TOKEN")
 roblox_client = Client(os.getenv("ROBLOX_COOKIE"))
 devmode = os.getenv("devmode")
 discordhookurl = os.getenv("dishook")
+
 # PREFIX = "💀!"
-PREFIX = "!" # change it 
+PREFIX = os.getenv("PREFIX") # change it 
 
 intents = discord.Intents.default()
 intents.message_content = True
