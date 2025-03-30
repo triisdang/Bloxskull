@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from roblox import Client
 from roblox.thumbnails import AvatarThumbnailType
-from roblox import groups
+from roblox.assets import EconomyAsset
 from yay.package import *
 from yay.update import *
 from better_profanity import profanity as pf
@@ -188,6 +188,36 @@ async def fetchgroup(ctx, group_id: str):
     except Exception as e:
         await ctx.send(embed=failed(str(e)))
         return
+@bot.command()
+async def fetchcatalog(ctx, *, item_id: str):
+    if not item_id.isdigit():
+        #randomitem = pickrandom("catalog")
+        #await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog {randomitem}`"))
+        await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog 121059938714983`"))
+        return
+        
+    item_id = int(item_id)
+    try:
+        item = await roblox_client.get_asset(item_id)  
+        asset_thumbnails = await roblox_client.thumbnails.get_asset_thumbnails(
+            assets=[item],
+            size=(150, 150)
+        )
+        embed = discord.Embed(title=f"Catalog Item: {item.name}", color=0x00ff00)
+        embed.add_field(name="ID", value=item.id, inline=False)
+        embed.add_field(name="Description", value=item.description or "No description.", inline=False)
+        embed.add_field(name="Creator", value=f"{item.creator.name} (ID : {item.creator.id})", inline=True)
+        embed.add_field(name="Price", value=item.price if item.price else "Free", inline=True)
+        embed.add_field(name="Sold count", value=item.sales, inline=True)
+        embed.add_field(name="Created", value=item.created, inline=True)
+        embed.add_field(name="Last updated", value=item.updated, inline=True)
+        embed.add_field(name="Limted item?", value="Yes" if item.is_limited else "No", inline=True)
+        embed.set_thumbnail(url=asset_thumbnails[0].image_url)
+        await ctx.send(embed=embed)
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+        return
+
 @bot.command()
 async def feedback(ctx, *, feedback: str):
         if not feedback:
