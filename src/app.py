@@ -254,6 +254,51 @@ async def fetchcatalog(ctx, *, item_id: str):
         return
 
 @bot.command()
+async def badgeimage(ctx, *, badge_id: str):
+    if not badge_id.isdigit():
+        randombadge = pickrandom("badge")
+        await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}fetchcatalog {randombadge}`"))
+        return
+    
+    badge_id = int(badge_id)
+    try : 
+        badge = await roblox_client.get_badge(badge_id)
+
+        badge_icons = await roblox_client.thumbnails.get_badge_icons(
+        badges=[badge],
+        size=(150, 150)
+        )
+        embed = discord.Embed(title=f"Image of badge {badge.name}", color=0x00ff00)
+        embed.set_image(url=badge_icons[0].image_url)
+
+        await ctx.send(embed=embed) 
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+
+
+@bot.command()
+async def catalogimage(ctx, *, catalog_id: str):
+    if not catalog_id.isdigit():
+        randomitem = pickrandom("catalog")
+        await ctx.send(embed=failed(f"Please provide a valid item ID, Example: `{PREFIX}catalogimage {randomitem}`"))
+        return
+
+    catalog_id = int(catalog_id)
+
+    try:
+        catalog = await roblox_client.get_asset(catalog_id)
+        thumbnails = await roblox_client.thumbnails.get_asset_thumbnails(
+            assets=[catalog_id],
+            size=(150, 150)
+        )
+        embed = discord.Embed(title=f"Image of catalog {catalog.name}", color=0x00ff00)
+        embed.set_image(url=thumbnails[0].image_url)
+        await ctx.send(embed=embed)
+    except Exception as e:
+        await ctx.send(embed=failed(str(e)))
+
+
+@bot.command()
 async def feedback(ctx, *, feedback: str):
         if not feedback:
             await ctx.send(embed=failed("Please provide a feedback."))
