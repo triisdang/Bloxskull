@@ -17,3 +17,4 @@ def pickrandom(id):
         return(random.choice(calatoglist))
     else :
         return("Unkown option")
+#yay
